@@ -1,0 +1,22 @@
+---
+- hosts: pis
+  become: true
+  pre_tasks:
+    - name: update package index
+      apt:
+        update_cache: yes
+
+- hosts: pis
+  become: true
+  tasks:
+    - name: install apache package
+      apt:
+        name: apache2
+        state: latest
+    - name: copy html file
+      copy:
+        src: index.html
+        dest: /var/www/html/ansible_page.html
+        owner: root
+        group: root
+        mode: 0644
