@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: create user superman
+      user:
+        name: superman
+        groups: root 
+
+    - name: ssh key for superman
+      authorized_key:
+        user: superman
+        key: ""
+         
