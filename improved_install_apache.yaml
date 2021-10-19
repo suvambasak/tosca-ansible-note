@@ -1,0 +1,11 @@
+---
+- hosts: pis
+  become: true
+  tasks:
+    - name: install package and update index
+      apt:
+        name: 
+          - apache2
+          - libapache2-mod-php
+        state: latest
+        update_cache: yes
