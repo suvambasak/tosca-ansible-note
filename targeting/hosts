@@ -1,0 +1,15 @@
+[web_servers]
+192.168.0.166
+192.168.0.167
+
+[db_servers]
+192.168.0.103
+192.168.0.105
+
+[web_servers:vars]
+ansible_user=pi
+ansible_password=lockthis
+
+[db_servers:vars]
+ansible_user=pi
+ansible_password=lockthis
