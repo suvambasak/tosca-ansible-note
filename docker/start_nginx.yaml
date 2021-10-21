@@ -1,0 +1,10 @@
+---
+- hosts: pis
+  become: yes
+  tasks:
+    - name: starting nginx container
+      community.docker.docker_container:
+        name: nginx
+        image: nginx:latest
+        ports:
+        - 8080:80
