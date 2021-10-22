@@ -2,6 +2,7 @@
 192.168.0.166
 192.168.0.103
 
-; [pis:vars]
+[pis:vars]
+ansible_python_interpreter=/usr/bin/python3
 ; ansible_user=pi
 ; ansible_password=lockthis
