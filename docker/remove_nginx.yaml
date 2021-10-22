@@ -1,0 +1,8 @@
+---
+- hosts: pis
+  become: yes
+  tasks:
+    - name: removing nginx container
+      community.docker.docker_container:
+        name: nginx
+        state: absent
