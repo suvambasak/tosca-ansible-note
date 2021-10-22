@@ -1,0 +1,7 @@
+[pis]
+192.168.0.166
+192.168.0.103
+
+; [pis:vars]
+; ansible_user=pi
+; ansible_password=lockthis
