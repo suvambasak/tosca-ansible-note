@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: pis
   gather_facts: false
 
   tasks:
