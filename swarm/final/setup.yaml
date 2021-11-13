@@ -1,0 +1,46 @@
+---
+- hosts: manager
+  become: true
+  tasks:
+    - name: Init a new swarm with default parameters
+      docker_swarm:
+        state: present
+      register: token
+    
+    - name: storing
+      shell: echo {{ token.swarm_facts.JoinTokens.Worker }}
+      register: tfile
+
+    - name: token output
+      debug:
+        msg : "{{ tfile.stdout }}"
+
+    - name: Register dummy host with variable
+      add_host:
+        name: "DUMMY_HOST"
+        PLAY1VAR_NEW: " {{ tfile.stdout }}"
+
+- hosts: worker
+  become: true
+  tasks:
+    - name: cho the output - PLAY1 variable vaule
+      shell: cat {{ hostvars['DUMMY_HOST']['PLAY1VAR_NEW'] }} |tail -1
+      register: PLAY2_RESULTS
+
+    - name: another node debug OP
+      debug: 
+        msg: "{{ PLAY2_RESULTS.cmd }}"
+
+    - name: recover
+      shell: echo {{ PLAY2_RESULTS.cmd|quote }} | awk '{print $2}'
+      register: op
+    
+    - debug: msg="{{op.stdout}}"
+
+    - name: adding node1
+      docker_swarm:
+        state: join
+        advertise_addr: 192.168.0.103
+        join_token: "{{ op.stdout }}"
+        remote_addrs: [ '192.168.0.166:2377' ]
+...

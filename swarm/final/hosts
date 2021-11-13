@@ -1,0 +1,16 @@
+[manager]
+192.168.0.166
+
+[manager:vars]
+ansible_python_interpreter=/home/pi/test/.venv/bin/python3
+; ansible_user=pi
+; ansible_password=lockthis
+
+
+[worker]
+192.168.0.103
+
+[worker:vars]
+ansible_python_interpreter=/home/pi/test/.venv/bin/python3
+; ansible_user=pi
+; ansible_password=lockthis

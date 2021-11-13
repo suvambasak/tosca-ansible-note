@@ -1,8 +1,13 @@
 ---
-- hosts: all
+- hosts: manager
   become: true
   tasks:
     - name: Init a new swarm with default parameters
       docker_swarm:
         state: present
+      register: token
+
+    - name: token output
+      debug:
+        msg : "{{ token.swarm_facts.JoinTokens.Worker }}"
 ...

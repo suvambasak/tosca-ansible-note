@@ -1,0 +1,26 @@
+---
+- hosts: manager
+  gather_facts: false
+
+  tasks:
+   - name: Register a new value
+     shell: echo "/etc/resolv.conf"
+     register: PLAY1VAR
+
+   - debug: msg="{{PLAY1VAR.stdout}}"
+
+   - name: Register dummy host with variable
+     add_host:
+       name: "DUMMY_HOST"
+       PLAY1VAR_NEW: " {{ PLAY1VAR.stdout }}"
+       
+- hosts: worker
+  gather_facts: false
+
+  tasks:
+   - name: Echo the output - PLAY1 variable vaule
+     shell: cat {{ hostvars['DUMMY_HOST']['PLAY1VAR_NEW'] }}
+     register: PLAY2_RESULTS
+
+   - debug: msg="{{PLAY2_RESULTS.stdout}}"
+...
