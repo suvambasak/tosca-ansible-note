@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Add nodes
+      community.docker.docker_swarm:
+        state: join
+        advertise_addr: 192.168.0.103
+        join_token: SWMTKN-1-5h3wtw59aqlcfvaece1kxksgf9gn4n5tmukc7j27iqkb1gb1ek-2ye5ldnh8ruh5n9592t8yi3ny
+        remote_addrs: [ '192.168.0.166:2377' ]
+...

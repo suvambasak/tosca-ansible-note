@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Deploy service
+      docker_swarm_service:
+        name: testservice
+        image: nginx
+        publish:
+          - published_port:
+            - 8080
+...
+

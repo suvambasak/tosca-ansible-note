@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Init a new swarm with default parameters
+      docker_swarm:
+        state: present
+      register: op
+
+    - name: Output in debug module
+      debug:
+        msg : "{{ op.swarm_facts.JoinTokens.Worker }}"
+
+    - name: add new node
+      shell: ssh -i /home/pi/.ssh/id_rsa pi@192.168.0.103 "docker swarm join --token {{ op.swarm_facts.JoinTokens.Worker }} 192.168.0.166:2377"
+...
+
+
+# hostvars[inventory_hostname]['ansible_default_ipv4']['address']
+
+# ssh pi@192.168.0.103 "docker swarm join --token SWMTKN-1-3g66is0mlmf1t7wb10i81bukge2s588zckls9fme461ops9ywv-1g2pvw7bfd2iucibx7quqgsa9 192.168.0.166:2377"
+# ssh -i /home/pi/.ssh/id_rsa pi@192.168.0.103 'touch hello.txt'
+
+
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Deploy service
+      docker_swarm_service:
+        name: testservice
+        image: nginx
+        publish:
+          - published_port:
+            - 8080
+          - target_port:
+            - 80
+...

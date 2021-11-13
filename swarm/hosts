@@ -1,0 +1,7 @@
+[pis]
+192.168.0.166
+
+[pis:vars]
+ansible_python_interpreter=/home/pi/test/.venv/bin/python3
+; ansible_user=pi
+; ansible_password=lockthis

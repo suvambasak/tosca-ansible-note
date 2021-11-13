@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: add new node
+      shell: ssh -i /home/pi/.ssh/id_rsa pi@192.168.0.103 'touch hello.txt'
+...

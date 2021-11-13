@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Init a new swarm with default parameters
+      docker_swarm:
+        state: present
+      register: op
+
+    - name: Output in debug module
+      debug:
+        msg : "{{ op.swarm_facts.JoinTokens.Worker }}"
+
+    - name: add new node
+      shell: ssh -i /home/pi/.ssh/id_rsa pi@192.168.0.103 "docker swarm join --token {{ op.swarm_facts.JoinTokens.Worker }} 192.168.0.166:2377"
+...
