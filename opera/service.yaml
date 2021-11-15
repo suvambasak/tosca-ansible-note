@@ -9,6 +9,9 @@ node_types:
           marker:
             default: { get_input: marker }
             type: string
+          names:
+            default: {get_input: names}
+            type: list
         operations:
           create: playbooks/create.yaml
           delete: playbooks/delete.yaml
@@ -18,6 +21,9 @@ topology_template:
     marker:
       type: string
       default: default-marker
+    names:
+      type: list
+      default: []
 
   node_templates:
     my-workstation:

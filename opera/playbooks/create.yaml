@@ -11,5 +11,6 @@
 
     - name: Ansible was here
       copy:
-        dest: /tmp/playing-opera/hello/hello.txt
+        dest: /tmp/playing-opera/hello/{{ item }}
         content: "{{ marker }}"
+      loop: "{{ names }}"
