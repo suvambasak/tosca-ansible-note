@@ -1,0 +1,66 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  hello_type:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      file_name:
+        type: string
+        description: The name of the file
+    attributes:
+      content:
+        type: string
+    interfaces:
+      Standard:
+        inputs:
+          marker:
+            value: { get_input: marker }
+            type: string
+          file_name: { value: { get_property: [ SELF, file_name ] }, type: string }
+          content: { value: { get_attribute: [ SELF, content ] }, type: string }
+        operations:
+          create: playbooks/create.yaml
+          delete: playbooks/delete.yaml
+
+topology_template:
+  inputs:
+    marker:
+      type: string
+      default: default-marker
+
+    name:
+      type: string
+      default: default-name
+
+    content_1:
+      type: string
+      default: default-content
+
+    content_2:
+      type: string
+      default: default-content
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: localhost
+        public_address: localhost
+
+    hello:
+      type: hello_type
+      properties:
+        file_name: basak
+      attributes:
+        content: { get_input: content_1 }
+      requirements:
+        - host: my-workstation
+
+    bye:
+      type: hello_type
+      properties:
+        file_name:  { get_input: name }
+      attributes:
+        content: content for second file
+      requirements:
+        - host: my-workstation
