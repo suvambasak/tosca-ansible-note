@@ -7,6 +7,9 @@ node_types:
       file_name:
         type: string
         description: The name of the file
+      ip:
+        type: string
+        description: ip addr
     attributes:
       content:
         type: string
@@ -18,16 +21,17 @@ node_types:
             type: string
           file_name: { value: { get_property: [ SELF, file_name ] }, type: string }
           content: { value: { get_attribute: [ SELF, content ] }, type: string }
+          ip: { value: { get_property: [ SELF, ip ] }, type: string }
         operations:
           create: playbooks/create.yaml
           delete: playbooks/delete.yaml
 
 topology_template:
   inputs:
+    host_ip:
+        type: string
     marker:
-      type: string
-      default: default-marker
-
+        type: string
     name:
       type: string
       default: default-name
@@ -44,22 +48,24 @@ topology_template:
     my-workstation:
       type: tosca.nodes.Compute
       attributes:
-        private_address: 192.168.0.112
-        public_address: 192.168.0.112
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
 
-    hello:
-      type: hello_type
-      properties:
-        file_name: basak
-      attributes:
-        content: { get_input: content_1 }
-      requirements:
-        - host: my-workstation
+    # hello:
+    #   type: hello_type
+    #   properties:
+    #     file_name: basak
+    #     ip: 'no ip'
+    #   attributes:
+    #     content: { get_input: content_1 }
+    #   requirements:
+    #     - host: my-workstation
 
     bye:
       type: hello_type
       properties:
         file_name:  { get_input: name }
+        ip: { get_input: host_ip }
       attributes:
         content: content for second file
       requirements:
