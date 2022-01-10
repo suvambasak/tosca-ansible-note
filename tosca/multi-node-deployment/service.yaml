@@ -1,0 +1,51 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  hello_type:
+    derived_from: tosca.nodes.SoftwareComponent
+    interfaces:
+      Standard:
+        inputs:
+          marker:
+            value: { get_input: marker }
+            type: string
+        operations:
+          create: playbooks/create.yaml
+          delete: playbooks/delete.yaml
+
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+    marker:
+      type: string
+      default: default-marker
+
+  node_templates:
+    my-workstation-1:
+      type: tosca.nodes.Compute
+      attributes:
+        # private_address: localhost
+        # public_address: localhost
+        private_address: 172.17.0.3
+        public_address: 172.17.0.3
+    
+    hello:
+      type: hello_type
+      requirements:
+        - host: my-workstation-1
+    
+    
+    my-workstation-2:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: 172.17.0.4
+        public_address: 172.17.0.4
+
+    hello-1:
+      type: hello_type
+      requirements:
+        - host: my-workstation-2
+...

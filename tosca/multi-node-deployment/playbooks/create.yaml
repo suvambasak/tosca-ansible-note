@@ -1,0 +1,19 @@
+---
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: bash command
+      command: "touch /tmp/Test.txt"
+
+    - name: Make the location
+      file:
+        path: /tmp/playing-opera/hello
+        recurse: true
+        state: directory
+
+    - name: Ansible was here
+      copy:
+        dest: /tmp/playing-opera/hello/hello.txt
+        content: "{{ marker }}"
+...
