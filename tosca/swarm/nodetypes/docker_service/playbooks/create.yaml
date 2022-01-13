@@ -1,13 +1,28 @@
 ---
 - hosts: all
   gather_facts: false
-
   tasks:
-    - name: Service deploying
-      docker_swarm_service:
-        name: "{{ container_name }}"
-        image: "{{ image_name }}"
-        replicas: "{{ replicas }}"
-        publish:
-          - published_port: "{{ published_port }}"
-            target_port: "{{ target_port }}"
+    - name: Make the location
+      file:
+        path: /tmp/stack
+        recurse: true
+        state: directory
+
+    - name: Fetch docker-compose file
+      command: "wget -q -O /tmp/stack/docker-compose.yaml https://gist.githubusercontent.com/suvambasak/b1dff415a8c6bedb01ba6b177723ae13/raw/31341e80164b12053263e561a7e0f1fb11aa16d8/docker-compose.yaml"
+
+    - name: Deploy stack from a compose file
+      docker_stack:
+        state: present
+        name: mystack
+        compose:
+          - /tmp/stack/docker-compose.yaml
+
+    # - name: Service deploying
+    #   docker_swarm_service:
+    #     name: "{{ container_name }}"
+    #     image: "{{ image_name }}"
+    #     replicas: "{{ replicas }}"
+    #     publish:
+    #       - published_port: "{{ published_port }}"
+    #         target_port: "{{ target_port }}"

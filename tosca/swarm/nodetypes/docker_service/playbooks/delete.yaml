@@ -3,7 +3,17 @@
   gather_facts: false
 
   tasks:
-    - name: Remove service service
-      docker_swarm_service:
-        name: "{{ container_name }}"
+    - name: Remove stack
+      docker_stack:
+        name: mystack
         state: absent
+
+    - name: Remove the location
+      file:
+        path: /tmp/stack
+        state: absent
+
+    # - name: Remove service service
+    #   docker_swarm_service:
+    #     name: "{{ container_name }}"
+    #     state: absent

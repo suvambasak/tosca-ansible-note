@@ -67,18 +67,6 @@ topology_template:
         - dependency: docker-swarm-worker-1
         - dependency: docker-swarm-worker-2
 
-    docker-service-2:
-      type: fog.docker.Service
-      properties:
-        container_name: websocket_server
-        image_name: suvambasak/pyimg:websocketledserver
-        published_port: 7890
-        target_port: 7890
-      requirements:
-        - host: docker-swarm-leader
-        - dependency: docker-swarm-worker-1
-        - dependency: docker-swarm-worker-2
-
   outputs:
     output_worker_token_attribute:
       value: { get_attribute: [docker-swarm-leader, worker_token] }
