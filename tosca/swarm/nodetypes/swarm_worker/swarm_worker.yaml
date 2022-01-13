@@ -20,6 +20,12 @@ node_types:
           capability: tosca.capabilities.Node
           relationship: fog.docker.swarm.relationships.TokenTransfer
 
+    capabilities:
+      host:
+        type: tosca.capabilities.Container
+        occurrences: [0, UNBOUNDED]
+        valid_source_types: [fog.docker.Service]
+
     interfaces:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
