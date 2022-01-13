@@ -7,14 +7,15 @@ imports:
   - relationshiptypes/token_transfer.yaml
   - nodetypes/swarm_leader/swarm_leader.yaml
   - nodetypes/swarm_worker/swarm_worker.yaml
+  - nodetypes/docker_service/docker_service.yaml
 
 topology_template:
   node_templates:
     fog-node-1:
       type: tosca.nodes.Compute
       attributes:
-        private_address: 192.168.0.112
-        public_address: 192.168.0.112
+        private_address: 172.17.0.3
+        public_address: 172.17.0.3
 
     docker-swarm-leader:
       type: fog.docker.SwarmLeader
@@ -24,21 +25,15 @@ topology_template:
     fog-node-2:
       type: tosca.nodes.Compute
       attributes:
-        private_address: 192.168.0.222
-        public_address: 192.168.0.222
-
-    # test-file-1:
-    #   type: hello_type
-    #   requirements:
-    #     - host: fog-node-2
-    #     - leader: docker-swarm-leader
+        private_address: 172.17.0.4
+        public_address: 172.17.0.4
 
     docker-swarm-worker-1:
       type: fog.docker.SwarmWorker
       properties:
-        ip_addr: 192.168.0.222
+        ip_addr: 172.17.0.4
         leader_ip_addrs_port:
-          - "192.168.0.112:2377"
+          - "172.17.0.3:2377"
       requirements:
         - host: fog-node-2
         - leader: docker-swarm-leader
@@ -46,24 +41,43 @@ topology_template:
     fog-node-3:
       type: tosca.nodes.Compute
       attributes:
-        private_address: 192.168.0.111
-        public_address: 192.168.0.111
-
-    # test-file-2:
-    #   type: hello_type
-    #   requirements:
-    #     - host: fog-node-3
-    #     - leader: docker-swarm-leader
+        private_address: 172.17.0.5
+        public_address: 172.17.0.5
 
     docker-swarm-worker-2:
       type: fog.docker.SwarmWorker
       properties:
-        ip_addr: 192.168.0.111
+        ip_addr: 172.17.0.5
         leader_ip_addrs_port:
-          - "192.168.0.112:2377"
+          - "172.17.0.3:2377"
       requirements:
         - host: fog-node-3
         - leader: docker-swarm-leader
+
+    docker-service-1:
+      type: fog.docker.Service
+      properties:
+        container_name: nginx
+        image_name: nginx
+        published_port: 80
+        target_port: 80
+        replicas: 1
+      requirements:
+        - host: docker-swarm-leader
+        - dependency: docker-swarm-worker-1
+        - dependency: docker-swarm-worker-2
+
+    docker-service-2:
+      type: fog.docker.Service
+      properties:
+        container_name: websocket_server
+        image_name: suvambasak/pyimg:websocketledserver
+        published_port: 7890
+        target_port: 7890
+      requirements:
+        - host: docker-swarm-leader
+        - dependency: docker-swarm-worker-1
+        - dependency: docker-swarm-worker-2
 
   outputs:
     output_worker_token_attribute:

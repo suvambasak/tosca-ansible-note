@@ -17,6 +17,12 @@ node_types:
         type: string
         default: unavailable
 
+    capabilities:
+      host:
+        type: tosca.capabilities.Container
+        occurrences: [1, UNBOUNDED]
+        valid_source_types: [fog.docker.Service]
+
     interfaces:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
