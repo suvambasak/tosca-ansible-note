@@ -21,7 +21,7 @@ node_types:
       host:
         type: tosca.capabilities.Container
         occurrences: [0, UNBOUNDED]
-        valid_source_types: [fog.docker.Service]
+        valid_source_types: [fog.docker.Services]
 
     interfaces:
       Standard:

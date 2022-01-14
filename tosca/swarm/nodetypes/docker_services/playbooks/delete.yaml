@@ -5,7 +5,7 @@
   tasks:
     - name: Remove stack
       docker_stack:
-        name: mystack
+        name: "{{ name }}"
         state: absent
 
     - name: Remove the location

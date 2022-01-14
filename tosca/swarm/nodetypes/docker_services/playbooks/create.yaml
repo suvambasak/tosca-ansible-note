@@ -9,12 +9,12 @@
         state: directory
 
     - name: Fetch docker-compose file
-      command: "wget -q -O /tmp/stack/docker-compose.yaml https://gist.githubusercontent.com/suvambasak/b1dff415a8c6bedb01ba6b177723ae13/raw/31341e80164b12053263e561a7e0f1fb11aa16d8/docker-compose.yaml"
+      command: "wget -q -O /tmp/stack/docker-compose.yaml {{ url }}"
 
     - name: Deploy stack from a compose file
       docker_stack:
         state: present
-        name: mystack
+        name: "{{ name }}"
         compose:
           - /tmp/stack/docker-compose.yaml
 
